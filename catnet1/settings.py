@@ -122,3 +122,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+try:
+    from catnet1.settings_local import *  # noqa
+except ImportError:
+    pass
