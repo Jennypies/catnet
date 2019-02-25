@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from .models import Node, Photo
 from django.core.mail import EmailMessage
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -10,23 +11,25 @@ def index(request):
 
 
 def email(node, file_list):
-    recipients = []
-    for user in node.contacts.all():
-        if user.is_active:
-            recipients.append(user.email)
+    if node.email_users:
+        recipients = []
+        for user in node.contacts.all():
+            if user.is_active:
+                recipients.append(user.email)
 
-    email = EmailMessage(
-        'Cat detected',
-        'Motion detected on {}'.format(node.name),
-        'jenny@jennythorne.co.uk',
-        recipients,
-    )
+        email = EmailMessage(
+            'Cat detected',
+            'Motion detected on {}'.format(node.name),
+            'jenny@jennythorne.co.uk',
+            recipients,
+        )
 
-    for pic in file_list:
-        email.attach_file(pic)
-    email.send(fail_silently=False)
+        for pic in file_list:
+            email.attach_file(pic)
+        email.send(fail_silently=False)
 
 
+@csrf_exempt
 def upload(request, node_pk):
     if request.method == 'POST':
         node = get_object_or_404(Node, pk=node_pk)

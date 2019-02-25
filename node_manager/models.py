@@ -6,6 +6,7 @@ class Node(models.Model):
     name = models.CharField(max_length=200)
     last_contact = models.DateTimeField('Last contact', null=True, editable=False)
     contacts = models.ManyToManyField(User)
+    email_users = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

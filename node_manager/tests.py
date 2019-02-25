@@ -57,3 +57,10 @@ class TestUpload(TestCase):
         self.client.post(resolve_url("upload", node.id), {'image': image})
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].attachments[0][1], b'catcatcat')
+
+    def testBooButton(self):
+        node = Node.objects.create(name="Test node")
+        self.assertEqual(node.email_users, True)
+        node.email_users = False
+        node.save()
+        self.assertEqual(node.email_users, False)
