@@ -105,3 +105,4 @@ venv.bak/
 
 # catnet_stuff
 media
+settings_local.py
